@@ -1,0 +1,17 @@
+/SecureChatApp
+│
+├─ src/
+│   ├─ client/
+│   │   ├─ ChatClient.java        # Handles client-side connection
+│   │   ├─ ClientGUI.java         # GUI for user interaction
+│   │   └─ EncryptionUtil.java    # AES/RSA encryption & decryption
+│   │
+│   ├─ server/
+│   │   ├─ ChatServer.java        # Manages incoming client connections
+│   │   └─ ServerHandler.java     # Handles messaging between clients
+│   │
+│   └─ database/
+│       └─ DatabaseHandler.java   # Manages SQLite DB operations
+│
+└─ resources/
+    └─ chat.db                    # SQLite database for users & messages
