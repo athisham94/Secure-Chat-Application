@@ -1,0 +1,2 @@
+# Secure-Chat-Application
+This project is a Java-based Secure Chat Application that enables safe real-time communication between users. It integrates AES/RSA encryption for message confidentiality and uses an SQLite database to manage user authentication and message storage.
