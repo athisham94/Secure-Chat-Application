@@ -1,0 +1,2 @@
+java -cp ".:out:lib/sqlite-jdbc-3.46.0.0.jar" securechat.server.ChatServer
+java -cp ".:out:lib/sqlite-jdbc-3.46.0.0.jar" securechat.Main

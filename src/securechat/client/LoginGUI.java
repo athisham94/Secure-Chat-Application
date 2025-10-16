@@ -2,26 +2,24 @@ package securechat.client;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import securechat.database.DatabaseHandler;
 
 public class LoginGUI extends JFrame {
 
+    private DatabaseHandler db;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JButton loginButton, registerButton;
-    private DatabaseHandler db;
+    private JButton loginButton;
+    private JButton registerButton;
 
-    public LoginGUI() {
-        db = new DatabaseHandler();
-        db.connect();
+    public LoginGUI(DatabaseHandler db) {
+        this.db = db;
 
-        setTitle("Secure Chat Login");
-        setSize(400, 200);
+        setTitle("Login - Secure Chat");
+        setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(4, 2, 10, 10));
+        setLayout(new GridLayout(4, 2));
 
-        // Components
         add(new JLabel("Username:"));
         usernameField = new JTextField();
         add(usernameField);
@@ -31,11 +29,11 @@ public class LoginGUI extends JFrame {
         add(passwordField);
 
         loginButton = new JButton("Login");
-        registerButton = new JButton("Register");
         add(loginButton);
+        registerButton = new JButton("Register");
         add(registerButton);
 
-        // Button actions
+        // Action listeners
         loginButton.addActionListener(e -> login());
         registerButton.addActionListener(e -> register());
 
@@ -44,37 +42,27 @@ public class LoginGUI extends JFrame {
 
     private void login() {
         String username = usernameField.getText().trim();
-        String password = new String(passwordField.getPassword()).trim();
+        String password = new String(passwordField.getPassword());
+
         if (db.validateUser(username, password)) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
-            openChat(username);
+            JOptionPane.showMessageDialog(this, "✅ Login success for " + username);
+            openChatClient(username);
         } else {
-            JOptionPane.showMessageDialog(this, "Login failed! Check credentials.");
+            JOptionPane.showMessageDialog(this, "❌ Login failed for " + username);
         }
     }
 
     private void register() {
         String username = usernameField.getText().trim();
-        String password = new String(passwordField.getPassword()).trim();
-        if (db.addUser(username, password)) {
-            JOptionPane.showMessageDialog(this, "Registration successful! You can now login.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Registration failed! Username may exist.");
-        }
+        String password = new String(passwordField.getPassword());
+
+        db.addUser(username, password);
+        JOptionPane.showMessageDialog(this, "👤 User added: " + username);
     }
 
-    private void openChat(String username) {
-        // Open main chat GUI
-        new ChatClient("localhost", 5050, username);
-        dispose(); // close login window
-    }
-
-    public void closeDB() {
-        db.close();
-    }
-
-    // For testing
-    public static void main(String[] args) {
-        new LoginGUI();
+    private void openChatClient(String username) {
+        // Connect to localhost server at port 5050
+        new ClientGUI(new ChatClient("localhost", 5050, username));
+        this.dispose(); // Close login window
     }
 }
